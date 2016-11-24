@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-11-04T12:16:11.999Z</updated>
+  <updated>2016-11-07T07:03:43.595Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,72 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>browser-sync 调试神器-浏览器自动同步刷新</title>
+    <link href="http://yoursite.com/2015/11/07/browser-sync/"/>
+    <id>http://yoursite.com/2015/11/07/browser-sync/</id>
+    <published>2015-11-07T03:19:27.000Z</published>
+    <updated>2016-11-07T07:03:43.595Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p><a href="https://browsersync.io/" target="_blank" rel="external">Browser-sync官网</a></p>
+<p>Browsersync能让多浏览器实时、快速响应文件更改（html、js、css、sass、less等）并自动刷新页面。</p>
+<p>更强大的是， 它<strong>可以同时在PC、平板、手机等设备下进项调试</strong>。</p>
+</blockquote>
+<p>以前在开发项目时，每次改动文件都要在浏览器中手动刷新才能看到效果，想要在多个浏览器看到效果更是麻烦。<br>那能不能让系统自动检测文件的更改，当文件更改时自动刷新浏览器呢？能不能同时刷新多个浏览器呢？<br>（事实上， browser-sync 可以做的事远不止如此）</p>
+<h2 id="1-必须有node环境"><a href="#1-必须有node环境" class="headerlink" title="1. 必须有node环境"></a>1. 必须有node环境</h2><p>BrowserSync是基于Node.js的, 是一个Node模块， 如果想要快速使用它，需要先安装一下Node.js<br>[安装适用于Mac OS，Windows和Linux][<a href="https://nodejs.org/download/" target="_blank" rel="external">https://nodejs.org/download/</a>]</p>
+<h2 id="2-安装-BrowserSync"><a href="#2-安装-BrowserSync" class="headerlink" title="2. 安装 BrowserSync"></a>2. 安装 BrowserSync</h2><p>可以选择从 <a href="https://nodejs.org/en/" target="_blank" rel="external">Node.js</a> 的包管理（NPM）[库中][<a href="https://www.npmjs.com/package/browser-sync" target="_blank" rel="external">https://www.npmjs.com/package/browser-sync</a>] 安装BrowserSync。<br>注意 browser-sync 是一个全局 package，因此使用 -g 参数（或者 –global ）</p>
+<p>打开任意一个终端窗口,告诉包管理器下载 BrowserSync 文件，并在全局下安装，运行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install -g browser-sync</div></pre></td></tr></table></figure>
+<p>若是与 <a href="http://gulpjs.com/" target="_blank" rel="external">gulp</a> 或 <a href="http://gruntjs.com/" target="_blank" rel="external">grunt</a> 构建工具来使用，在需要构建的项目里运行下面的命令:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install --save-dev browser-sync</div></pre></td></tr></table></figure>
+<ul>
+<li>查看 npm 模块全局安装的根目录 可以使用<strong> $ npm root -g </strong>命令来查看。</li>
+</ul>
+<h2 id="3-启动-BrowserSync"><a href="#3-启动-BrowserSync" class="headerlink" title="3. 启动 BrowserSync"></a>3. 启动 BrowserSync</h2><p>安装完成之后，就可以启动服务了。<br>将目录切换到项目目录，执行相应的命令。</p>
+<h3 id="静态网站"><a href="#静态网站" class="headerlink" title="静态网站"></a>静态网站</h3><p>如果要监听自己项目中的文件, 就需要使用服务器模式。<br> BrowserSync 会启动一个小型服务器，并提供一个 URL 用来查看自己的网站。</p>
+<p> 这里假设监听 .html 、 .css 及 .js 等多个类型的文件，要想只监听一种类型的文件，做小小改动就好</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// --files 路径是相对于运行该命令的项目（目录） </div><div class="line">// start --server，就表示启动了一个小型服务器</div><div class="line">$ browser-sync start --server --files <span class="string">"*.html, css/*.css, js/*.js"</span></div><div class="line"></div><div class="line">// 如果你的文件层级比较深，您可以考虑使用 **（表示任意目录）匹配，任意目录下任意.css 或 .html文件。 </div><div class="line">$ browser-sync start --server --files <span class="string">"**/*.css, **/*.html"</span></div></pre></td></tr></table></figure>
+<p>执行完这行命令后，会自动打开系统默认浏览器，地址为 <a href="http://localhost:3000" target="_blank" rel="external">http://localhost:3000</a> ，<br>也就是说：browser-sync 开启了一个端口为 3000 的服务器。</p>
+<p>此时，用其他的浏览器中也打开 <a href="http://localhost:3000" target="_blank" rel="external">http://localhost:3000</a> 这个页面，就能够访问到同样的内容了。<br>同时，只要文件发生更改，所有的浏览器都会自动刷新。</p>
+<p><img src="../img/sync-demo.gif" alt="sync-demo"></p>
+<h4 id="可视化界面（GUI）控制面板"><a href="#可视化界面（GUI）控制面板" class="headerlink" title="可视化界面（GUI）控制面板"></a>可视化界面（GUI）控制面板</h4><p>通过 GUI 来控制，在一个浏览器中滚动页面、表单输入和点击事件等行为也会同步到其他浏览器和设备中。</p>
+<p>该面板默认地址为 <a href="http://localhost:3001" target="_blank" rel="external">http://localhost:3001</a> 进入该控制面板可以进行更多设置，同时也可以看到 browser-sync 的更多可用功能。</p>
+<p><img src="../img/GUIControl.png" alt="GUIControl"></p>
+<p><strong>滚动窗口的演示</strong></p>
+<p><img src="../img/scroll-demo.gif" alt="scroll-demo"></p>
+<h3 id="动态网站"><a href="#动态网站" class="headerlink" title="动态网站"></a>动态网站</h3><p>如果已经有其他本地服务器环境 PHP 或类似的，需要使用 <em>代理模式</em> 。<br> BrowserSync 将通过代理 URL(localhost:3000) 来查看您的网站。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 主机名可以是ip或域名</div><div class="line">$ browser-sync start --proxy <span class="string">"主机名"</span> <span class="string">"css/*.css"</span></div></pre></td></tr></table></figure>
+<p>在本地创建了一个 PHP 服务器环境，并通过绑定 Browsersync.cn 来访问本地服务器，<br>使用以下命令方式， Browsersync 将提供一个新的地址 localhost:3000 来访问 Browsersync.cn ，<br>并监听其 css 目录下的所有 css 文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ browser-sync start --proxy <span class="string">"Browsersync.cn"</span> <span class="string">"css/*.css"</span></div></pre></td></tr></table></figure>
+<h2 id="4-结合构建工具使用-gulp"><a href="#4-结合构建工具使用-gulp" class="headerlink" title="4. 结合构建工具使用(gulp)"></a>4. 结合构建工具使用(gulp)</h2><blockquote>
+<p>在安装的步骤中给出了与 gulp 或 grunt 构建工具使用要执行的命令</p>
+</blockquote>
+<p><strong>此处说说 如何加入 gulp 中使用 </strong></p>
+<p> <a href="http://gulpjs.com/" target="_blank" rel="external">Gulp</a>  是现在流行的自动化工具，<br>但 BrowserSync 并没有 Gulp 插件版，因为并不需要。<br> BrowserSync 有自己独立的 API ，将它注册为 gulp 的一个 task 即可。</p>
+<p>下面是一段gulpfile.js的示例：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">'gulp'</span>);</div><div class="line"><span class="keyword">var</span> browserSync = <span class="built_in">require</span>(<span class="string">'browser-sync'</span>);</div><div class="line"></div><div class="line">gulp.task(<span class="string">'browser-sync'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    browserSync(&#123;</div><div class="line">        <span class="attr">files</span>: <span class="string">"**"</span>,</div><div class="line">        <span class="attr">server</span>: &#123;</div><div class="line">            <span class="attr">baseDir</span>: <span class="string">"./"</span></div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">gulp.task(<span class="string">'default'</span>, [<span class="string">"browser-sync"</span>]);</div></pre></td></tr></table></figure>
+<p>这时运行gulp将等同于前文中的browser-sync start –server –files “**”。</p>
+<p><strong>关于结合 gulp 或 grunt 来使用，详细了解 <a href="http://www.browsersync.cn/docs/gulp/" target="_blank" rel="external">Gulp文档</a>、<br> <a href="http://www.browsersync.cn/docs/grunt/" target="_blank" rel="external">Grunt文档</a> </strong></p>
+<h2 id="Thanks"><a href="#Thanks" class="headerlink" title="Thanks"></a>Thanks</h2><ul>
+<li><a href="http://www.browsersync.cn/" target="_blank" rel="external">http://www.browsersync.cn/</a></li>
+<li><a href="http://www.mamicode.com/info-detail-669066.html" target="_blank" rel="external">http://www.mamicode.com/info-detail-669066.html</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;https://browsersync.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Browser-sync官网&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Browsersync能让多浏览器实时、快速响应文件更改（html
+    
+    </summary>
+    
+    
+      <category term="browser-sync" scheme="http://yoursite.com/tags/browser-sync/"/>
+    
+  </entry>
   
   <entry>
     <title>Node.js自学（一）</title>
@@ -434,7 +500,7 @@
     <link href="http://yoursite.com/2015/05/15/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
     <id>http://yoursite.com/2015/05/15/正则表达式/</id>
     <published>2015-05-15T09:08:52.000Z</published>
-    <updated>2016-11-05T15:41:24.212Z</updated>
+    <updated>2016-11-07T07:03:39.535Z</updated>
     
     <content type="html"><![CDATA[<h2 id="长度限制"><a href="#长度限制" class="headerlink" title="长度限制"></a>长度限制</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"> </span></div><div class="line">function test() </div><div class="line">&#123; </div><div class="line">if(document.a.b.value.length&gt;50) </div><div class="line">&#123; </div><div class="line">alert("不能超过50个字符！"); </div><div class="line">document.a.b.focus(); </div><div class="line">return false; </div><div class="line">&#125; </div><div class="line">&#125; </div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span> </div><div class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">name</span>=<span class="string">a</span> <span class="attr">onsubmit</span>=<span class="string">"return test()"</span>&gt;</span> </div><div class="line"><span class="tag">&lt;<span class="name">textarea</span> <span class="attr">name</span>=<span class="string">"b"</span> <span class="attr">cols</span>=<span class="string">"40"</span> <span class="attr">wrap</span>=<span class="string">"VIRTUAL"</span> <span class="attr">rows</span>=<span class="string">"6"</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span> </div><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">name</span>=<span class="string">"Submit"</span> <span class="attr">value</span>=<span class="string">"check"</span>&gt;</span> </div><div class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></div></pre></td></tr></table></figure>
 <h2 id="只能是汉字"><a href="#只能是汉字" class="headerlink" title="只能是汉字"></a>只能是汉字</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">onkeyup</span>=<span class="string">"value="</span>/<span class="attr">oblog</span>/<span class="attr">value.replace</span>(/[^\<span class="attr">u4E00-</span>\<span class="attr">u9FA5</span>]/<span class="attr">g</span>,'')"&gt;</span></div></pre></td></tr></table></figure>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>browser-sync 调试神器-浏览器自动同步刷新 | YHZ &#39; s Blog | 技术之路，在于热爱与积累</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="theme-color" content="#3F51B5">
+  
+  
+  <meta name="keywords" content="browser-sync">
+  <meta name="description" content="Browser-sync官网
+Browsersync能让多浏览器实时、快速响应文件更改（html、js、css、sass、less等）并自动刷新页面。
+更强大的是， 它可以同时在PC、平板、手机等设备下进项调试。
+
+以前在开发项目时，每次改动文件都要在浏览器中手动刷新才能看到效果，想要在多个浏览器看到效果更是麻烦。那能不能让系统自动检测文件的更改，当文件更改时自动刷新浏览器呢？能不能同时刷新多个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="browser-sync 调试神器-浏览器自动同步刷新">
+<meta property="og:url" content="http://yoursite.com/2015/11/07/browser-sync/index.html">
+<meta property="og:site_name" content="YHZ ' s Blog">
+<meta property="og:description" content="Browser-sync官网
+Browsersync能让多浏览器实时、快速响应文件更改（html、js、css、sass、less等）并自动刷新页面。
+更强大的是， 它可以同时在PC、平板、手机等设备下进项调试。
+
+以前在开发项目时，每次改动文件都要在浏览器中手动刷新才能看到效果，想要在多个浏览器看到效果更是麻烦。那能不能让系统自动检测文件的更改，当文件更改时自动刷新浏览器呢？能不能同时刷新多个">
+<meta property="og:image" content="http://yoursite.com/../img/sync-demo.gif">
+<meta property="og:image" content="http://yoursite.com/../img/GUIControl.png">
+<meta property="og:image" content="http://yoursite.com/../img/scroll-demo.gif">
+<meta property="og:updated_time" content="2016-11-07T07:03:43.595Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="browser-sync 调试神器-浏览器自动同步刷新">
+<meta name="twitter:description" content="Browser-sync官网
+Browsersync能让多浏览器实时、快速响应文件更改（html、js、css、sass、less等）并自动刷新页面。
+更强大的是， 它可以同时在PC、平板、手机等设备下进项调试。
+
+以前在开发项目时，每次改动文件都要在浏览器中手动刷新才能看到效果，想要在多个浏览器看到效果更是麻烦。那能不能让系统自动检测文件的更改，当文件更改时自动刷新浏览器呢？能不能同时刷新多个">
+<meta name="twitter:image" content="http://yoursite.com/../img/sync-demo.gif">
+  
+    <link rel="alternative" href="/atom.xml" title="YHZ &#39; s Blog" type="application/atom+xml">
+  
+  <meta name="summary" content="null">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="loading" class="active"></div>
+
+  <nav id="menu" class="hide" >
+   <aside id="menu" class="show" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap">
+      <div class="brand">
+        <a href="/" class="avatar"><img src="/img/logo.jpg"></a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Loya</h5>
+          <a href="mailto:1573099721@qq.com" title="1573099721@qq.com" class="mail">1573099721@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/fontpiece" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+
+      <footer class="footer">
+  <p><a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0;vertical-align:middle;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAPCAMAAABEF7i9AAAAllBMVEUAAAD///+rsapERER3d3eIiIjMzMzu7u4iIiKUmZO6v7rKzsoODg4RERFVVVUNDQ0NDg0PEA8zMzNLTEtbXltmZmZydnF9gn2AgICPkI+ZmZmqqqq7u7vFxsXIzMgNDQwZGRkgICAhISEkJSMnKCcuMC4xMzE5Ozk7PTtBQkFCQkJDQ0Nna2eGhoaHh4ezuLLGysbd3d1wVGpAAAAA4UlEQVR42q2T1xqCMAyFk7QsBQeKA9x7j/d/OSm22CpX0nzcpA1/T05aAOuBVkMAScQFHLnEwoCo2f1TnQIGoVMewjZEjVFN4GH1Ue1Cn2jWqwfsOOj6wDwGvotsl/c8lv7KIq1eLOsT0HMFHMIE/RZyHnlphryT9zyV+8WH5e8yQw3wnQvgAFxPTKUVi555SHR/lOfLMgVTeDlSfN+TaoUsiTyeIm+bCkHvCA2FUKG48LDtYBZBknsYP/G8NTw0gaaHyuQf4H5pecrB/FYCT2sL9zAfy1Xyjou6L8X2W7YcLyBZCRtnq/zfAAAAAElFTkSuQmCC" /></a></p>
+  <p>YHZ &#39; s Blog &copy; 2016</p>
+  <p>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme
+  <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></p>
+  <a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a>
+</footer>
+
+    </div>
+  </div>
+</aside>
+  </nav>
+  <main id="main">
+    <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">browser-sync 调试神器-浏览器自动同步刷新</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-share">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header">
+
+    <div class="container">
+        
+
+    </div>
+</header>
+
+    <div class="container body-wrap">
+      
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-必须有node环境"><span class="post-toc-number">1.</span> <span class="post-toc-text">1. 必须有node环境</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-安装-BrowserSync"><span class="post-toc-number">2.</span> <span class="post-toc-text">2. 安装 BrowserSync</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-启动-BrowserSync"><span class="post-toc-number">3.</span> <span class="post-toc-text">3. 启动 BrowserSync</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#静态网站"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">静态网站</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#可视化界面（GUI）控制面板"><span class="post-toc-number">3.1.1.</span> <span class="post-toc-text">可视化界面（GUI）控制面板</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#动态网站"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">动态网站</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4-结合构建工具使用-gulp"><span class="post-toc-number">4.</span> <span class="post-toc-text">4. 结合构建工具使用(gulp)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Thanks"><span class="post-toc-number">5.</span> <span class="post-toc-text">Thanks</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-browser-sync" 
+  class="post-article article-type-post" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">browser-sync 调试神器-浏览器自动同步刷新</h1>
+        <div class="post-meta">
+            <time datetime="2015-11-07T03:19:27.000Z" itemprop="datePublished" class="post-time">
+  2015-11-07
+</time>
+
+            
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p><a href="https://browsersync.io/" target="_blank" rel="external">Browser-sync官网</a></p>
+<p>Browsersync能让多浏览器实时、快速响应文件更改（html、js、css、sass、less等）并自动刷新页面。</p>
+<p>更强大的是， 它<strong>可以同时在PC、平板、手机等设备下进项调试</strong>。</p>
+</blockquote>
+<p>以前在开发项目时，每次改动文件都要在浏览器中手动刷新才能看到效果，想要在多个浏览器看到效果更是麻烦。<br>那能不能让系统自动检测文件的更改，当文件更改时自动刷新浏览器呢？能不能同时刷新多个浏览器呢？<br>（事实上， browser-sync 可以做的事远不止如此）</p>
+<h2 id="1-必须有node环境"><a href="#1-必须有node环境" class="headerlink" title="1. 必须有node环境"></a>1. 必须有node环境</h2><p>BrowserSync是基于Node.js的, 是一个Node模块， 如果想要快速使用它，需要先安装一下Node.js<br>[安装适用于Mac OS，Windows和Linux][<a href="https://nodejs.org/download/" target="_blank" rel="external">https://nodejs.org/download/</a>]</p>
+<h2 id="2-安装-BrowserSync"><a href="#2-安装-BrowserSync" class="headerlink" title="2. 安装 BrowserSync"></a>2. 安装 BrowserSync</h2><p>可以选择从 <a href="https://nodejs.org/en/" target="_blank" rel="external">Node.js</a> 的包管理（NPM）[库中][<a href="https://www.npmjs.com/package/browser-sync" target="_blank" rel="external">https://www.npmjs.com/package/browser-sync</a>] 安装BrowserSync。<br>注意 browser-sync 是一个全局 package，因此使用 -g 参数（或者 –global ）</p>
+<p>打开任意一个终端窗口,告诉包管理器下载 BrowserSync 文件，并在全局下安装，运行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install -g browser-sync</div></pre></td></tr></table></figure>
+<p>若是与 <a href="http://gulpjs.com/" target="_blank" rel="external">gulp</a> 或 <a href="http://gruntjs.com/" target="_blank" rel="external">grunt</a> 构建工具来使用，在需要构建的项目里运行下面的命令:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install --save-dev browser-sync</div></pre></td></tr></table></figure>
+<ul>
+<li>查看 npm 模块全局安装的根目录 可以使用<strong> $ npm root -g </strong>命令来查看。</li>
+</ul>
+<h2 id="3-启动-BrowserSync"><a href="#3-启动-BrowserSync" class="headerlink" title="3. 启动 BrowserSync"></a>3. 启动 BrowserSync</h2><p>安装完成之后，就可以启动服务了。<br>将目录切换到项目目录，执行相应的命令。</p>
+<h3 id="静态网站"><a href="#静态网站" class="headerlink" title="静态网站"></a>静态网站</h3><p>如果要监听自己项目中的文件, 就需要使用服务器模式。<br> BrowserSync 会启动一个小型服务器，并提供一个 URL 用来查看自己的网站。</p>
+<p> 这里假设监听 .html 、 .css 及 .js 等多个类型的文件，要想只监听一种类型的文件，做小小改动就好</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// --files 路径是相对于运行该命令的项目（目录） </div><div class="line">// start --server，就表示启动了一个小型服务器</div><div class="line">$ browser-sync start --server --files <span class="string">"*.html, css/*.css, js/*.js"</span></div><div class="line"></div><div class="line">// 如果你的文件层级比较深，您可以考虑使用 **（表示任意目录）匹配，任意目录下任意.css 或 .html文件。 </div><div class="line">$ browser-sync start --server --files <span class="string">"**/*.css, **/*.html"</span></div></pre></td></tr></table></figure>
+<p>执行完这行命令后，会自动打开系统默认浏览器，地址为 <a href="http://localhost:3000" target="_blank" rel="external">http://localhost:3000</a> ，<br>也就是说：browser-sync 开启了一个端口为 3000 的服务器。</p>
+<p>此时，用其他的浏览器中也打开 <a href="http://localhost:3000" target="_blank" rel="external">http://localhost:3000</a> 这个页面，就能够访问到同样的内容了。<br>同时，只要文件发生更改，所有的浏览器都会自动刷新。</p>
+<p><img src="../img/sync-demo.gif" alt="sync-demo"></p>
+<h4 id="可视化界面（GUI）控制面板"><a href="#可视化界面（GUI）控制面板" class="headerlink" title="可视化界面（GUI）控制面板"></a>可视化界面（GUI）控制面板</h4><p>通过 GUI 来控制，在一个浏览器中滚动页面、表单输入和点击事件等行为也会同步到其他浏览器和设备中。</p>
+<p>该面板默认地址为 <a href="http://localhost:3001" target="_blank" rel="external">http://localhost:3001</a> 进入该控制面板可以进行更多设置，同时也可以看到 browser-sync 的更多可用功能。</p>
+<p><img src="../img/GUIControl.png" alt="GUIControl"></p>
+<p><strong>滚动窗口的演示</strong></p>
+<p><img src="../img/scroll-demo.gif" alt="scroll-demo"></p>
+<h3 id="动态网站"><a href="#动态网站" class="headerlink" title="动态网站"></a>动态网站</h3><p>如果已经有其他本地服务器环境 PHP 或类似的，需要使用 <em>代理模式</em> 。<br> BrowserSync 将通过代理 URL(localhost:3000) 来查看您的网站。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 主机名可以是ip或域名</div><div class="line">$ browser-sync start --proxy <span class="string">"主机名"</span> <span class="string">"css/*.css"</span></div></pre></td></tr></table></figure>
+<p>在本地创建了一个 PHP 服务器环境，并通过绑定 Browsersync.cn 来访问本地服务器，<br>使用以下命令方式， Browsersync 将提供一个新的地址 localhost:3000 来访问 Browsersync.cn ，<br>并监听其 css 目录下的所有 css 文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ browser-sync start --proxy <span class="string">"Browsersync.cn"</span> <span class="string">"css/*.css"</span></div></pre></td></tr></table></figure>
+<h2 id="4-结合构建工具使用-gulp"><a href="#4-结合构建工具使用-gulp" class="headerlink" title="4. 结合构建工具使用(gulp)"></a>4. 结合构建工具使用(gulp)</h2><blockquote>
+<p>在安装的步骤中给出了与 gulp 或 grunt 构建工具使用要执行的命令</p>
+</blockquote>
+<p><strong>此处说说 如何加入 gulp 中使用 </strong></p>
+<p> <a href="http://gulpjs.com/" target="_blank" rel="external">Gulp</a>  是现在流行的自动化工具，<br>但 BrowserSync 并没有 Gulp 插件版，因为并不需要。<br> BrowserSync 有自己独立的 API ，将它注册为 gulp 的一个 task 即可。</p>
+<p>下面是一段gulpfile.js的示例：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">'gulp'</span>);</div><div class="line"><span class="keyword">var</span> browserSync = <span class="built_in">require</span>(<span class="string">'browser-sync'</span>);</div><div class="line"></div><div class="line">gulp.task(<span class="string">'browser-sync'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    browserSync(&#123;</div><div class="line">        <span class="attr">files</span>: <span class="string">"**"</span>,</div><div class="line">        <span class="attr">server</span>: &#123;</div><div class="line">            <span class="attr">baseDir</span>: <span class="string">"./"</span></div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">gulp.task(<span class="string">'default'</span>, [<span class="string">"browser-sync"</span>]);</div></pre></td></tr></table></figure>
+<p>这时运行gulp将等同于前文中的browser-sync start –server –files “**”。</p>
+<p><strong>关于结合 gulp 或 grunt 来使用，详细了解 <a href="http://www.browsersync.cn/docs/gulp/" target="_blank" rel="external">Gulp文档</a>、<br> <a href="http://www.browsersync.cn/docs/grunt/" target="_blank" rel="external">Grunt文档</a> </strong></p>
+<h2 id="Thanks"><a href="#Thanks" class="headerlink" title="Thanks"></a>Thanks</h2><ul>
+<li><a href="http://www.browsersync.cn/" target="_blank" rel="external">http://www.browsersync.cn/</a></li>
+<li><a href="http://www.mamicode.com/info-detail-669066.html" target="_blank" rel="external">http://www.mamicode.com/info-detail-669066.html</a></li>
+</ul>
+
+        </div>
+        
+        <blockquote class="post-copyright">
+            <div class="content">
+               这里写留言或版权声明：<a href="/2015/11/07/browser-sync/" target="_blank" rel="external">http://yoursite.com/2015/11/07/browser-sync/</a>
+            </div>
+            <footer>
+                <a href="http://yoursite.com">
+                    <img src="/img/logo.jpg" alt="Loya">
+                    Loya
+                </a>
+            </footer>
+        </blockquote>
+
+        
+        <div class="post-reward">
+            <a id="rewardBtn" href="javascript:;" class="post-reward-btn waves-effect waves-circle waves-light">赏</a>
+        </div>
+        
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/browser-sync/">browser-sync</a></li></ul>
+
+
+            
+            <div class="post-share-wrap">
+                <div class="post-share" id="post-share">
+    <div class="tit">分享到：</div>
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" href="javascript:;" data-title="微博" data-service="tsina">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns" href="javascript:;" data-title="微信" data-service="weixin">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" href="javascript:;" data-title=" QQ" data-service="cqq">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" href="javascript:;" data-title=" Facebook" data-service="fb">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" href="javascript:;" data-title=" Twitter" data-service="twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="douban share-sns" href="javascript:;" data-title="豆瓣" data-service="douban">
+          豆
+        </a>
+      </li>
+    </ul>
+ </div>
+
+                <a href="javascript:;" id="share-fab" class="post-share-fab waves-effect waves-circle">
+                    <i class="icon icon-share-alt icon-lg"></i>
+                </a>
+            </div>
+            
+
+        </div>
+    </div>   
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2015/09/10/nodeJS-1/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Node.js自学（一）</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+            
+    
+
+
+
+</article>
+
+<div id="reward" class="reward-lay">
+    <a class="reward-off" id="rewardOff" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <ul class="reward-items">
+        
+        <li>
+            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
+            <p>微信</p>
+        </li>
+        
+
+        
+        <li>
+            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
+            <p>支付宝</p>
+        </li>
+        
+    </ul>
+</div>
+
+
+</div>
+    </div>
+  </main>
+<div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+<script>var BLOG = { ROOT: '/' };
+BLOG.SHARE = {
+title: "browser-sync 调试神器-浏览器自动同步刷新",
+pic: "/img/logo.jpg",
+summary: document.getElementsByName('summary')[0].content,
+url: "http://yoursite.com/2015/11/07/browser-sync/" }
+</script>
+<div class="global-share" id="global-share">
+    <div class="tit">分享到：</div>
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" href="javascript:;" data-title="微博" data-service="tsina">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns" href="javascript:;" data-title="微信" data-service="weixin">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" href="javascript:;" data-title=" QQ" data-service="cqq">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" href="javascript:;" data-title=" Facebook" data-service="fb">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" href="javascript:;" data-title=" Twitter" data-service="twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="douban share-sns" href="javascript:;" data-title="豆瓣" data-service="douban">
+          豆
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<script src="/js/waves.min.js"></script>
+<script src="/js/main.min.js?v=1.1.6"></script>
+
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.1.6"></script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>
